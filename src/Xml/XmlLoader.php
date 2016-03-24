@@ -47,14 +47,15 @@ class XmlLoader {
         $dom = new DOMDocument();
         $success = $dom->$method($source, LIBXML_NONET | LIBXML_NOBLANKS);
 
-        if ($success === FALSE) {
-            $error = libxml_get_last_error();
-            throw new XmlException($error ? : $this->getCustomError('Unknown error'));
-        }
+        $error = libxml_get_last_error();
 
         libxml_clear_errors();
         libxml_use_internal_errors($internalErrorsOld);
         libxml_disable_entity_loader($entityLoaderOld);
+
+        if ($success === FALSE) {
+            throw new XmlException($error ? : $this->getCustomError('Unknown error'));
+        }
 
         return $dom;
     }
