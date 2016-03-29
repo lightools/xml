@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Lightools\Tests;
 
 use Lightools\Xml\XmlException;
 use Lightools\Xml\XmlLoader;
