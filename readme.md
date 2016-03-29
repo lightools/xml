@@ -11,6 +11,9 @@ $ composer require lightools/xml
 
 ## Simple usage
 
+Both loading methods (loadXml and loadHtml) return DomDocument.
+If you prefer working with SimpleXmlElement, you can use [simplexml_import_dom](https://secure.php.net/manual/en/function.simplexml-import-dom.php) function.
+
 ```php
 $xml = '<?xml version="1.0"?><root>text</root>';
 $html = '<!doctype html><title>Foo</title>';
