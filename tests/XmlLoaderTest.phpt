@@ -18,7 +18,7 @@ Environment::setup();
  */
 class XmlLoaderTest extends TestCase {
 
-    public function testBillionLaugh() {
+    public function testBillionLaugh(): void {
         $source = trim('
         <?xml version="1.0"?>
         <!DOCTYPE lolz [
@@ -36,13 +36,13 @@ class XmlLoaderTest extends TestCase {
         <lolz>&lol9;</lolz>
         ');
 
-        Assert::exception(function () use ($source) {
+        Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
         }, XmlException::class, 'XML Fatal Error #89: Detected an entity reference loop on line 14 and column 21');
     }
 
-    public function testQuadraticBlowup() {
+    public function testQuadraticBlowup(): void {
         $source = trim('
         <?xml version="1.0"?>
         <!DOCTYPE kaboom [
@@ -51,32 +51,32 @@ class XmlLoaderTest extends TestCase {
         <kaboom>' . str_repeat('&a;', 100000) . '</kaboom>
         ');
 
-        Assert::exception(function () use ($source) {
+        Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             (string) $loader->loadXml($source);
         }, XmlException::class, 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0');
     }
 
-    public function testEmptySource() {
+    public function testEmptySource(): void {
         Assert::exception(function () {
             $loader = new XmlLoader();
             $loader->loadXml('');
         }, XmlException::class, 'XML Fatal Error #0: Empty string supplied as input on line 0 and column 0');
     }
 
-    public function testInvalidXml() {
+    public function testInvalidXml(): void {
         $source = trim('
         <?xml version="1.0"?>
         <invalid>
         ');
 
-        Assert::exception(function () use ($source) {
+        Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
-        }, XmlException::class, 'XML Fatal Error #77: Premature end of data in tag invalid line 2 on line 2 and column 10');
+        }, XmlException::class, 'XML Fatal Error #77: Premature end of data in tag invalid line 2 on line 2 and column 18');
     }
 
-    public function testValidXml() {
+    public function testValidXml(): void {
         $source = trim('
         <?xml version="1.0"?>
         <note>
@@ -92,7 +92,7 @@ class XmlLoaderTest extends TestCase {
         Assert::same('Jack', $xml->getElementsByTagName('from')->item(0)->nodeValue);
     }
 
-    public function testValidHtml() {
+    public function testValidHtml(): void {
         $source = trim('
         <!doctype html>
         <html lang=en>

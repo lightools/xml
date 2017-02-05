@@ -15,7 +15,7 @@ class XmlLoader {
      * @return DOMDocument Root element
      * @throws XmlException When parsing fails
      */
-    public function loadXml($xml) {
+    public function loadXml(string $xml): DOMDocument {
         $domDocument = $this->load($xml, 'loadXml');
         $this->checkDomDocumentChildren($domDocument);
         return $domDocument;
@@ -26,7 +26,7 @@ class XmlLoader {
      * @return DOMDocument Root element
      * @throws XmlException When parsing fails
      */
-    public function loadHtml($html) {
+    public function loadHtml(string $html): DOMDocument {
         return $this->load($html, 'loadHtml');
     }
 
@@ -36,7 +36,7 @@ class XmlLoader {
      * @return DOMDocument
      * @throws XmlException
      */
-    private function load($source, $method) {
+    private function load(string $source, string $method): DOMDocument {
         if (!$source) {
             throw new XmlException($this->getCustomError('Empty string supplied as input'));
         }
@@ -65,7 +65,7 @@ class XmlLoader {
      * @param DOMDocument $dom
      * @throws XmlException
      */
-    private function checkDomDocumentChildren(DOMDocument $dom) {
+    private function checkDomDocumentChildren(DOMDocument $dom): void {
         foreach ($dom->childNodes as $child) {
             if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
                 throw new XmlException($this->getCustomError('Document types are not allowed'));
@@ -73,11 +73,7 @@ class XmlLoader {
         }
     }
 
-    /**
-     * @param string $message
-     * @return LibXMLError
-     */
-    private function getCustomError($message) {
+    private function getCustomError(string $message): LibXMLError {
         $err = new LibXMLError();
         $err->level = LIBXML_ERR_FATAL;
         $err->message = $message;

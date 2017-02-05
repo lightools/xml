@@ -33,10 +33,7 @@ class XmlException extends RuntimeException {
         parent::__construct($errorMessage, $error->code);
     }
 
-    /**
-     * @return LibXMLError
-     */
-    public function getError() {
+    public function getError(): LibXMLError {
         return $this->error;
     }
 

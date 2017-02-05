@@ -34,3 +34,9 @@ try {
 ```sh
 $ vendor/bin/tester tests
 ```
+
+
+## Versions
+
+- v1.x is for PHP 5.4 and higher
+- v2.x is for PHP 7.1 and higher

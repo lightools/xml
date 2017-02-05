@@ -3,11 +3,10 @@
     "description": "Simple and safe parsing of XML and HTML sources.",
     "license": ["MIT"],
     "require": {
-        "php": ">=5.4",
+        "php": ">=7.1",
         "ext-dom": "*"
     },
     "require-dev": {
-        "php": ">=5.5",
         "nette/tester": "1.*"
     },
     "autoload": {
