@@ -26,6 +26,8 @@ class XmlException extends RuntimeException {
             case LIBXML_ERR_FATAL:
                 $errorMessage = "XML Fatal Error #$error->code: $info";
                 break;
+            default:
+                $errorMessage = "Unknown XML failure #$error->code: $info";
         }
 
         parent::__construct($errorMessage, $error->code);
