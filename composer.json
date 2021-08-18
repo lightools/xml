@@ -21,6 +21,6 @@
         "classmap": ["src/"]
     },
     "scripts": {
-        "check": "ec && phpcs && phpstan analyse -vvv && tester tests"
+        "check": "ec && phpcs && phpstan analyse -vvv && tester -C tests"
     }
 }
