@@ -3,13 +3,24 @@
     "description": "Simple and safe parsing of XML and HTML sources.",
     "license": ["MIT"],
     "require": {
-        "php": ">=7.1",
-        "ext-dom": "*"
+        "php": ">=8.0",
+        "ext-dom": "*",
+        "ext-libxml": "*"
     },
     "require-dev": {
-        "nette/tester": "1.*"
+        "editorconfig-checker/editorconfig-checker": "^10.2",
+        "nette/tester": "2.*",
+        "phpstan/phpstan": "^0.12.94",
+        "phpstan/phpstan-strict-rules": "^0.12.10",
+        "slevomat/coding-standard": "^7.0"
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "classmap": ["src/"]
+    },
+    "scripts": {
+        "check": "ec && phpcs && phpstan analyse -vvv && tester tests"
     }
 }

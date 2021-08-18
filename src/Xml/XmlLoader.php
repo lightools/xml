@@ -1,60 +1,67 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Lightools\Xml;
 
 use DOMDocument;
 use LibXMLError;
+use function libxml_clear_errors;
+use function libxml_get_last_error;
+use function libxml_use_internal_errors;
+use const LIBXML_ERR_FATAL;
+use const LIBXML_NOBLANKS;
+use const LIBXML_NONET;
+use const XML_DOCUMENT_TYPE_NODE;
 
-/**
- * @author Jan Nedbal
- */
-class XmlLoader {
+class XmlLoader
+{
+
+    private const LOAD_XML = 'xml';
+    private const LOAD_HTML = 'html';
 
     /**
-     * @param string $xml XML string
-     * @return DOMDocument Root element
      * @throws XmlException When parsing fails
      */
-    public function loadXml(string $xml): DOMDocument {
-        $domDocument = $this->load($xml, 'loadXml');
+    public function loadXml(string $xml): DOMDocument
+    {
+        $domDocument = $this->load($xml, self::LOAD_XML);
         $this->checkDomDocumentChildren($domDocument);
         return $domDocument;
     }
 
     /**
-     * @param string $html HTML string
-     * @return DOMDocument Root element
      * @throws XmlException When parsing fails
      */
-    public function loadHtml(string $html): DOMDocument {
-        return $this->load($html, 'loadHtml');
+    public function loadHtml(string $html): DOMDocument
+    {
+        return $this->load($html, self::LOAD_HTML);
     }
 
     /**
-     * @param string $source
-     * @param string $method DomDocument loading method (loadXml or loadHtml)
-     * @return DOMDocument
      * @throws XmlException
      */
-    private function load(string $source, string $method): DOMDocument {
-        if (!$source) {
+    private function load(string $source, string $method): DOMDocument
+    {
+        if ($source === '') {
             throw new XmlException($this->getCustomError('Empty string supplied as input'));
         }
 
-        $internalErrorsOld = libxml_use_internal_errors(TRUE);
-        $entityLoaderOld = libxml_disable_entity_loader(TRUE);
+        $internalErrorsOld = libxml_use_internal_errors(true);
 
         $dom = new DOMDocument();
-        $success = $dom->$method($source, LIBXML_NONET | LIBXML_NOBLANKS);
+
+        if ($method === self::LOAD_XML) {
+            $success = $dom->loadXML($source, LIBXML_NONET | LIBXML_NOBLANKS);
+        } else {
+            $success = $dom->loadHTML($source, LIBXML_NONET | LIBXML_NOBLANKS);
+        }
 
         $error = libxml_get_last_error();
 
         libxml_clear_errors();
         libxml_use_internal_errors($internalErrorsOld);
-        libxml_disable_entity_loader($entityLoaderOld);
 
-        if ($success === FALSE) {
-            throw new XmlException($error ? : $this->getCustomError('Unknown error'));
+        if ($success === false) {
+            throw new XmlException($error !== false ? $error : $this->getCustomError('Unknown error'));
         }
 
         return $dom;
@@ -62,10 +69,10 @@ class XmlLoader {
 
     /**
      * @see http://stackoverflow.com/a/10218526/1542616
-     * @param DOMDocument $dom
      * @throws XmlException
      */
-    private function checkDomDocumentChildren(DOMDocument $dom): void {
+    private function checkDomDocumentChildren(DOMDocument $dom): void
+    {
         foreach ($dom->childNodes as $child) {
             if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
                 throw new XmlException($this->getCustomError('Document types are not allowed'));
@@ -73,14 +80,15 @@ class XmlLoader {
         }
     }
 
-    private function getCustomError(string $message): LibXMLError {
+    private function getCustomError(string $message): LibXMLError
+    {
         $err = new LibXMLError();
         $err->level = LIBXML_ERR_FATAL;
         $err->message = $message;
         $err->code = 0;
         $err->column = 0;
         $err->line = 0;
-        $err->file = NULL;
+        $err->file = '';
         return $err;
     }
 

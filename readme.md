@@ -29,10 +29,10 @@ try {
 }
 ```
 
-## How to run tests
+## How to run checks
 
 ```sh
-$ vendor/bin/tester tests
+$ composer check
 ```
 
 
@@ -40,3 +40,4 @@ $ vendor/bin/tester tests
 
 - v1.x is for PHP 5.4 and higher
 - v2.x is for PHP 7.1 and higher
+- v3.x is for PHP 8.0 and higher
