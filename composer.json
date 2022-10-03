@@ -15,7 +15,10 @@
         "slevomat/coding-standard": "^7.0"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
     },
     "autoload": {
         "classmap": ["src/"]
