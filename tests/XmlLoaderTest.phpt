@@ -72,7 +72,7 @@ class XmlLoaderTest extends TestCase {
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
-        }, XmlException::class, 'XML Fatal Error #74: EndTag: \'</\' not found on line 2 and column 18');
+        }, XmlException::class, 'XML Fatal Error #77: Premature end of data in tag invalid line 2 on line 2 and column 18');
     }
 
     public function testValidXml(): void {
