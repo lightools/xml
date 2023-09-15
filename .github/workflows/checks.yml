@@ -12,7 +12,6 @@ jobs:
             fail-fast: false
             matrix:
                 php-version: [ '8.0', '8.1', '8.2', '8.3' ]
-                dependency-version: [ prefer-lowest, prefer-stable ]
         steps:
             -
                 name: Checkout code
@@ -24,7 +23,7 @@ jobs:
                     php-version: ${{ matrix.php-version }}
             -
                 name: Install dependencies
-                run: composer update --no-progress --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+                run: composer install --no-progress --prefer-dist --no-interaction
             -
                 name: Run checks and tests
                 run: composer check
