@@ -17,6 +17,8 @@ Environment::setup();
  */
 class XmlLoaderTest extends TestCase {
 
+    private const LIBXML_WITH_ENTITY_EXPANSION_PROTECTION = 21100; // https://github.com/GNOME/libxml2/commit/3f69fc805c9bea48f9339b1ce6c9db7a10f03f63#diff-e944513ca01df80ccaa2ddb8f845f0dee99c66e68cf56224c46de88a742fe7c3
+
     public function testBillionLaugh(): void {
         $source = trim('
         <?xml version="1.0"?>
@@ -35,10 +37,16 @@ class XmlLoaderTest extends TestCase {
         <lolz>&lol9;</lolz>
         ');
 
+        if (LIBXML_VERSION >= self::LIBXML_WITH_ENTITY_EXPANSION_PROTECTION) {
+            $error = 'XML Fatal Error #89: Maximum entity amplification factor exceeded on line 1 and column 25';
+        } else {
+            $error = 'XML Fatal Error #89: Detected an entity reference loop on line 14 and column 21';
+        }
+
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
-        }, XmlException::class, 'XML Fatal Error #89: Detected an entity reference loop on line 14 and column 21');
+        }, XmlException::class, $error);
     }
 
     public function testQuadraticBlowup(): void {
@@ -50,10 +58,16 @@ class XmlLoaderTest extends TestCase {
         <kaboom>' . str_repeat('&a;', 100000) . '</kaboom>
         ');
 
+        if (LIBXML_VERSION >= self::LIBXML_WITH_ENTITY_EXPANSION_PROTECTION) {
+            $error = 'XML Fatal Error #89: Maximum entity amplification factor exceeded on line 5 and column 47';
+        } else {
+            $error = 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0';
+        }
+
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             (string) $loader->loadXml($source);
-        }, XmlException::class, 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0');
+        }, XmlException::class, $error);
     }
 
     public function testEmptySource(): void {
@@ -69,10 +83,16 @@ class XmlLoaderTest extends TestCase {
         <invalid>
         ');
 
+        if (LIBXML_VERSION < 20911) {
+            $error = 'XML Fatal Error #74: EndTag: \'</\' not found on line 2 and column 18';
+        } else {
+            $error = 'XML Fatal Error #77: Premature end of data in tag invalid line 2 on line 2 and column 18';
+        }
+
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
-        }, XmlException::class, 'XML Fatal Error #74: EndTag: \'</\' not found on line 2 and column 18');
+        }, XmlException::class, $error);
     }
 
     public function testValidXml(): void {
