@@ -87,16 +87,16 @@
         },
         {
             "name": "editorconfig-checker/editorconfig-checker",
-            "version": "10.6.0",
+            "version": "10.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/editorconfig-checker/editorconfig-checker.php.git",
-                "reference": "c51272f825bf0aa02421d47825a8d5f1f2c15049"
+                "reference": "eb2581bee39d10e776e69048a88fb10a76a0cc9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/editorconfig-checker/editorconfig-checker.php/zipball/c51272f825bf0aa02421d47825a8d5f1f2c15049",
-                "reference": "c51272f825bf0aa02421d47825a8d5f1f2c15049",
+                "url": "https://api.github.com/repos/editorconfig-checker/editorconfig-checker.php/zipball/eb2581bee39d10e776e69048a88fb10a76a0cc9f",
+                "reference": "eb2581bee39d10e776e69048a88fb10a76a0cc9f",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +135,7 @@
                 "issues": "https://github.com/editorconfig-checker/editorconfig-checker.php/issues",
                 "source": "https://github.com/editorconfig-checker/editorconfig-checker.php"
             },
-            "time": "2024-03-04T12:55:53+00:00"
+            "time": "2025-03-17T14:59:08+00:00"
         },
         {
             "name": "nette/tester",
@@ -368,16 +368,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "8.16.0",
+            "version": "8.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "7748a4282df19daf966fda1d8c60a8aec803c83a"
+                "reference": "8bf0408a9cf30687d87957d364de9a3d5d00d948"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/7748a4282df19daf966fda1d8c60a8aec803c83a",
-                "reference": "7748a4282df19daf966fda1d8c60a8aec803c83a",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/8bf0408a9cf30687d87957d364de9a3d5d00d948",
+                "reference": "8bf0408a9cf30687d87957d364de9a3d5d00d948",
                 "shasum": ""
             },
             "require": {
@@ -389,11 +389,11 @@
             "require-dev": {
                 "phing/phing": "3.0.1",
                 "php-parallel-lint/php-parallel-lint": "1.4.0",
-                "phpstan/phpstan": "2.1.6",
+                "phpstan/phpstan": "2.1.11",
                 "phpstan/phpstan-deprecation-rules": "2.0.1",
-                "phpstan/phpstan-phpunit": "2.0.4",
-                "phpstan/phpstan-strict-rules": "2.0.3",
-                "phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.9|12.0.4"
+                "phpstan/phpstan-phpunit": "2.0.6",
+                "phpstan/phpstan-strict-rules": "2.0.4",
+                "phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.15|12.0.10"
             },
             "type": "phpcodesniffer-standard",
             "extra": {
@@ -417,7 +417,7 @@
             ],
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/8.16.0"
+                "source": "https://github.com/slevomat/coding-standard/tree/8.16.2"
             },
             "funding": [
                 {
@@ -429,20 +429,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-23T18:12:49+00:00"
+            "time": "2025-03-27T19:37:58+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.11.3",
+            "version": "3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "ba05f990e79cbe69b9f35c8c1ac8dca7eecc3a10"
+                "reference": "2d1b63db139c3c6ea0c927698e5160f8b3b8d630"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/ba05f990e79cbe69b9f35c8c1ac8dca7eecc3a10",
-                "reference": "ba05f990e79cbe69b9f35c8c1ac8dca7eecc3a10",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/2d1b63db139c3c6ea0c927698e5160f8b3b8d630",
+                "reference": "2d1b63db139c3c6ea0c927698e5160f8b3b8d630",
                 "shasum": ""
             },
             "require": {
@@ -509,11 +509,11 @@
                     "type": "open_collective"
                 },
                 {
-                    "url": "https://thanks.dev/phpcsstandards",
+                    "url": "https://thanks.dev/u/gh/phpcsstandards",
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-01-23T17:04:15+00:00"
+            "time": "2025-03-18T05:04:51+00:00"
         }
     ],
     "aliases": [],
