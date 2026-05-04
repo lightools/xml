@@ -8,11 +8,11 @@
         "ext-libxml": "*"
     },
     "require-dev": {
-        "editorconfig-checker/editorconfig-checker": "^10.4.0",
-        "nette/tester": "^v2.5.1",
-        "phpstan/phpstan": "^1.10.34",
-        "phpstan/phpstan-strict-rules": "^1.5.1",
-        "slevomat/coding-standard": "^8.13.4"
+        "editorconfig-checker/editorconfig-checker": "^10.7.0",
+        "nette/tester": "^2.6.0",
+        "phpstan/phpstan": "^2.1.54",
+        "phpstan/phpstan-strict-rules": "^2.0.11",
+        "slevomat/coding-standard": "^8.28.1"
     },
     "config": {
         "sort-packages": true,
