@@ -135,6 +135,12 @@ class XmlLoaderTest extends TestCase {
         Assert::same('Foo', $html->getElementsByTagName('title')->item(0)->textContent);
     }
 
+    public function testMalformedHtml(): void {
+        $loader = new XmlLoader();
+        $html = $loader->loadHtml('<p><b>foo</p></b><table><tr>');
+        Assert::same('foo', $html->getElementsByTagName('b')->item(0)->textContent);
+    }
+
 }
 
 (new XmlLoaderTest)->run();

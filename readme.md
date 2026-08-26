@@ -12,6 +12,7 @@ $ composer require lightools/xml
 ## Simple usage
 
 The loadXml method returns `Dom\XMLDocument` and the loadHtml method returns `Dom\HTMLDocument` (parsed by the spec-compliant HTML5 parser).
+The HTML5 parser recovers from malformed markup, so loadHtml throws only for empty input.
 If you prefer working with SimpleXmlElement, you can use [simplexml_import_dom](https://secure.php.net/manual/en/function.simplexml-import-dom.php) function.
 
 ```php
