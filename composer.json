@@ -3,7 +3,7 @@
     "description": "Simple and safe parsing of XML and HTML sources.",
     "license": ["MIT"],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.4",
         "ext-dom": "*",
         "ext-libxml": "*"
     },

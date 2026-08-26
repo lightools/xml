@@ -2,7 +2,9 @@
 
 namespace Lightools\Xml;
 
-use DOMDocument;
+use Dom\HTMLDocument;
+use Dom\XMLDocument;
+use DOMException;
 use LibXMLError;
 use function libxml_clear_errors;
 use function libxml_get_last_error;
@@ -10,36 +12,43 @@ use function libxml_use_internal_errors;
 use const LIBXML_ERR_FATAL;
 use const LIBXML_NOBLANKS;
 use const LIBXML_NONET;
-use const XML_DOCUMENT_TYPE_NODE;
 
 class XmlLoader
 {
 
-    private const LOAD_XML = 'xml';
-    private const LOAD_HTML = 'html';
-
     /**
      * @throws XmlException When parsing fails
      */
-    public function loadXml(string $xml): DOMDocument
+    public function loadXml(string $xml): XMLDocument
     {
-        $domDocument = $this->load($xml, self::LOAD_XML);
-        $this->checkDomDocumentChildren($domDocument);
+        $domDocument = $this->parse(static function () use ($xml): XMLDocument {
+            return XMLDocument::createFromString($xml, LIBXML_NONET | LIBXML_NOBLANKS);
+        }, $xml);
+
+        if ($domDocument->doctype !== null) {
+            throw new XmlException($this->getCustomError('Document types are not allowed'));
+        }
+
         return $domDocument;
     }
 
     /**
      * @throws XmlException When parsing fails
      */
-    public function loadHtml(string $html): DOMDocument
+    public function loadHtml(string $html): HTMLDocument
     {
-        return $this->load($html, self::LOAD_HTML);
+        return $this->parse(static function () use ($html): HTMLDocument {
+            return HTMLDocument::createFromString($html);
+        }, $html);
     }
 
     /**
+     * @template T of XMLDocument|HTMLDocument
+     * @param callable(): T $parser
+     * @return T
      * @throws XmlException
      */
-    private function load(string $source, string $method): DOMDocument
+    private function parse(callable $parser, string $source): XMLDocument|HTMLDocument
     {
         if ($source === '') {
             throw new XmlException($this->getCustomError('Empty string supplied as input'));
@@ -47,36 +56,16 @@ class XmlLoader
 
         $internalErrorsOld = libxml_use_internal_errors(true);
 
-        $dom = new DOMDocument();
+        try {
+            return $parser();
 
-        if ($method === self::LOAD_XML) {
-            $success = $dom->loadXML($source, LIBXML_NONET | LIBXML_NOBLANKS);
-        } else {
-            $success = $dom->loadHTML($source, LIBXML_NONET | LIBXML_NOBLANKS);
-        }
+        } catch (DOMException $e) {
+            $error = libxml_get_last_error();
+            throw new XmlException($error !== false ? $error : $this->getCustomError($e->getMessage()));
 
-        $error = libxml_get_last_error();
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrorsOld);
-
-        if ($success === false) {
-            throw new XmlException($error !== false ? $error : $this->getCustomError('Unknown error'));
-        }
-
-        return $dom;
-    }
-
-    /**
-     * @see http://stackoverflow.com/a/10218526/1542616
-     * @throws XmlException
-     */
-    private function checkDomDocumentChildren(DOMDocument $dom): void
-    {
-        foreach ($dom->childNodes as $child) {
-            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
-                throw new XmlException($this->getCustomError('Document types are not allowed'));
-            }
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($internalErrorsOld);
         }
     }
 
