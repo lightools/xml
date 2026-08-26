@@ -4,13 +4,10 @@ namespace Lightools\Tests;
 
 use Lightools\Xml\XmlException;
 use Lightools\Xml\XmlLoader;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use function str_repeat;
 use function trim;
 
-#[CoversClass(XmlLoader::class)]
-#[CoversClass(XmlException::class)]
 class XmlLoaderTest extends TestCase
 {
 

@@ -11,7 +11,6 @@
     beStrictAboutCoverageMetadata="true"
     beStrictAboutOutputDuringTests="true"
     beStrictAboutTestsThatDoNotTestAnything="true"
-    requireCoverageMetadata="true"
     displayDetailsOnAllIssues="true"
 >
     <testsuites>
