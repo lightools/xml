@@ -5,8 +5,14 @@
     bootstrap="vendor/autoload.php"
     cacheDirectory="cache/phpunit"
     colors="true"
-    failOnRisky="true"
-    failOnWarning="true"
+    failOnAllIssues="true"
+    failOnEmptyTestSuite="true"
+    beStrictAboutChangesToGlobalState="true"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    requireCoverageMetadata="true"
+    displayDetailsOnAllIssues="true"
 >
     <testsuites>
         <testsuite name="default">

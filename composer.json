@@ -27,6 +27,11 @@
         "classmap": ["tests/"]
     },
     "scripts": {
-        "check": "ec && phpcs && phpstan analyse -vvv && phpunit"
+        "check": [
+            "ec",
+            "phpcs",
+            "phpstan analyse -vvv",
+            "phpunit"
+        ]
     }
 }
