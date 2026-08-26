@@ -66,6 +66,21 @@ class XmlLoaderTest extends TestCase {
         }, XmlException::class, 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0');
     }
 
+    public function testExternalEntityInjection(): void {
+        $source = trim('
+        <?xml version="1.0"?>
+        <!DOCTYPE root [
+            <!ENTITY xxe SYSTEM "file://' . __FILE__ . '">
+        ]>
+        <root>&xxe;</root>
+        ');
+
+        Assert::exception(function () use ($source): void {
+            $loader = new XmlLoader();
+            $loader->loadXml($source);
+        }, XmlException::class, 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0');
+    }
+
     public function testEmptySource(): void {
         Assert::exception(function () {
             $loader = new XmlLoader();
