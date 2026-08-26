@@ -9,9 +9,9 @@
     },
     "require-dev": {
         "editorconfig-checker/editorconfig-checker": "^10.7.0",
-        "nette/tester": "^2.6.0",
         "phpstan/phpstan": "^2.1.54",
         "phpstan/phpstan-strict-rules": "^2.0.11",
+        "phpunit/phpunit": "^13.3",
         "slevomat/coding-standard": "^8.28.1"
     },
     "config": {
@@ -23,7 +23,10 @@
     "autoload": {
         "classmap": ["src/"]
     },
+    "autoload-dev": {
+        "classmap": ["tests/"]
+    },
     "scripts": {
-        "check": "ec && phpcs && phpstan analyse -vvv && tester -C tests"
+        "check": "ec && phpcs && phpstan analyse -vvv && phpunit"
     }
 }
