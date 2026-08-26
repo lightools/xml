@@ -61,7 +61,7 @@ class XmlLoader
 
         } catch (DOMException $e) {
             $error = libxml_get_last_error();
-            throw new XmlException($error !== false ? $error : $this->getCustomError($e->getMessage()));
+            throw new XmlException($error !== false ? $error : $this->getCustomError($e->getMessage()), $e);
 
         } finally {
             libxml_clear_errors();
