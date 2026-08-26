@@ -2,4 +2,3 @@
 /cache/*
 !/cache/.gitkeep
 /.idea
-/tests/output
