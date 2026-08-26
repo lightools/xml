@@ -17,8 +17,6 @@ Environment::setup();
  */
 class XmlLoaderTest extends TestCase {
 
-    private const LIBXML_WITH_ENTITY_EXPANSION_PROTECTION = 21100; // https://github.com/GNOME/libxml2/commit/3f69fc805c9bea48f9339b1ce6c9db7a10f03f63#diff-e944513ca01df80ccaa2ddb8f845f0dee99c66e68cf56224c46de88a742fe7c3
-
     public function testBillionLaugh(): void {
         $source = trim('
         <?xml version="1.0"?>
@@ -37,16 +35,11 @@ class XmlLoaderTest extends TestCase {
         <lolz>&lol9;</lolz>
         ');
 
-        if (LIBXML_VERSION >= self::LIBXML_WITH_ENTITY_EXPANSION_PROTECTION) {
-            $error = 'XML Fatal Error #89: Maximum entity amplification factor exceeded on line 1 and column 25';
-        } else {
-            $error = 'XML Fatal Error #89: Detected an entity reference loop on line 14 and column 21';
-        }
-
+        // message differs across libxml versions, see https://github.com/GNOME/libxml2/commit/3f69fc805c9bea48f9339b1ce6c9db7a10f03f63
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
-        }, XmlException::class, $error);
+        }, XmlException::class, 'XML Fatal Error #89: %a% on line %d% and column %d%');
     }
 
     public function testQuadraticBlowup(): void {
@@ -58,16 +51,34 @@ class XmlLoaderTest extends TestCase {
         <kaboom>' . str_repeat('&a;', 100000) . '</kaboom>
         ');
 
-        if (LIBXML_VERSION >= self::LIBXML_WITH_ENTITY_EXPANSION_PROTECTION) {
-            $error = 'XML Fatal Error #89: Maximum entity amplification factor exceeded on line 5 and column 47';
-        } else {
-            $error = 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0';
-        }
+        Assert::exception(function () use ($source): void {
+            $loader = new XmlLoader();
+            $loader->loadXml($source);
+        }, XmlException::class, 'XML Fatal Error #89: %a% on line %d% and column %d%');
+    }
+
+    public function testDoctype(): void {
+        $source = '<?xml version="1.0"?><!DOCTYPE root><root/>';
 
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
-            (string) $loader->loadXml($source);
-        }, XmlException::class, $error);
+            $loader->loadXml($source);
+        }, XmlException::class, 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0');
+    }
+
+    public function testExternalEntityInjection(): void {
+        $source = trim('
+        <?xml version="1.0"?>
+        <!DOCTYPE root [
+            <!ENTITY xxe SYSTEM "file://' . __FILE__ . '">
+        ]>
+        <root>&xxe;</root>
+        ');
+
+        Assert::exception(function () use ($source): void {
+            $loader = new XmlLoader();
+            $loader->loadXml($source);
+        }, XmlException::class, 'XML Fatal Error #0: Document types are not allowed on line 0 and column 0');
     }
 
     public function testEmptySource(): void {
@@ -83,16 +94,10 @@ class XmlLoaderTest extends TestCase {
         <invalid>
         ');
 
-        if (LIBXML_VERSION < 20911) {
-            $error = 'XML Fatal Error #74: EndTag: \'</\' not found on line 2 and column 18';
-        } else {
-            $error = 'XML Fatal Error #77: Premature end of data in tag invalid line 2 on line 2 and column 18';
-        }
-
         Assert::exception(function () use ($source): void {
             $loader = new XmlLoader();
             $loader->loadXml($source);
-        }, XmlException::class, $error);
+        }, XmlException::class, 'XML Fatal Error #77: Premature end of data in tag invalid line 2 on line 2 and column 18');
     }
 
     public function testValidXml(): void {
@@ -108,7 +113,7 @@ class XmlLoaderTest extends TestCase {
 
         $loader = new XmlLoader();
         $xml = $loader->loadXml($source);
-        Assert::same('Jack', $xml->getElementsByTagName('from')->item(0)->nodeValue);
+        Assert::same('Jack', $xml->getElementsByTagName('from')->item(0)->textContent);
     }
 
     public function testValidHtml(): void {
@@ -126,8 +131,14 @@ class XmlLoaderTest extends TestCase {
         ');
 
         $loader = new XmlLoader();
-        $xml = $loader->loadHtml($source);
-        Assert::same('Foo', $xml->getElementsByTagName('title')->item(0)->nodeValue);
+        $html = $loader->loadHtml($source);
+        Assert::same('Foo', $html->getElementsByTagName('title')->item(0)->textContent);
+    }
+
+    public function testMalformedHtml(): void {
+        $loader = new XmlLoader();
+        $html = $loader->loadHtml('<p><b>foo</p></b><table><tr>');
+        Assert::same('foo', $html->getElementsByTagName('b')->item(0)->textContent);
     }
 
 }

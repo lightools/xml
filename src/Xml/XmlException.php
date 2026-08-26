@@ -4,6 +4,7 @@ namespace Lightools\Xml;
 
 use LibXMLError;
 use RuntimeException;
+use Throwable;
 use function trim;
 use const LIBXML_ERR_ERROR;
 use const LIBXML_ERR_FATAL;
@@ -14,7 +15,7 @@ class XmlException extends RuntimeException
 
     private LibXMLError $error;
 
-    public function __construct(LibXMLError $error)
+    public function __construct(LibXMLError $error, ?Throwable $previous = null)
     {
         $this->error = $error;
         $info = trim($error->message) . " on line $error->line and column $error->column";
@@ -26,7 +27,7 @@ class XmlException extends RuntimeException
             default => "Unknown XML failure #$error->code: $info",
         };
 
-        parent::__construct($errorMessage, $error->code);
+        parent::__construct($errorMessage, $error->code, $previous);
     }
 
     public function getError(): LibXMLError
